@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+/* Custom theme using CSS custom properties */
+@theme {
+  /* Light theme colors */
+  --color-background: #f1f5f9;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-primary: #3b82f6;
+  --color-primary-dark: #2563eb;
+  --color-success: #22c55e;
+  --color-success-dark: #16a34a;
+  --color-warning: #f59e0b;
+  --color-warning-dark: #d97706;
+  --color-danger: #ef4444;
+  --color-danger-dark: #dc2626;
+  --color-text-primary: #1e293b;
+  --color-text-secondary: #64748b;
+  --color-border: rgba(148, 163, 184, 0.2);
+
+  /* Gradients */
+  --gradient-success: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  --gradient-warning: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  --gradient-danger: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+  --gradient-primary: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+
+  /* Font family */
+  --font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Shadows */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-elevated: 0 10px 40px rgba(0, 0, 0, 0.12);
+  --shadow-glow-primary: 0 0 20px rgba(59, 130, 246, 0.4);
+  --shadow-glow-success: 0 0 20px rgba(34, 197, 94, 0.3);
+}
+
+/* Base styles */
+html {
+  font-family: var(--font-sans);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+/* Dark mode overrides */
+.dark {
+  --color-background: #0a0f1a;
+  --color-surface: #141b2d;
+  --color-surface-elevated: #1a2332;
+  --color-primary: #60a5fa;
+  --color-primary-dark: #3b82f6;
+  --color-success: #4ade80;
+  --color-success-dark: #22c55e;
+  --color-warning: #fbbf24;
+  --color-warning-dark: #f59e0b;
+  --color-danger: #f87171;
+  --color-danger-dark: #ef4444;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-border: rgba(148, 163, 184, 0.1);
+
+  --gradient-success: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+  --gradient-warning: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
+  --gradient-danger: linear-gradient(135deg, #fca5a5 0%, #f87171 100%);
+  --gradient-primary: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%);
+
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.2);
+  --shadow-elevated: 0 20px 60px rgba(0, 0, 0, 0.4);
+  --shadow-glow-primary: 0 0 30px rgba(96, 165, 250, 0.3);
+  --shadow-glow-success: 0 0 30px rgba(74, 222, 128, 0.25);
+}
+
+/* Tabular numbers for stats */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Card hover effect */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Smooth progress bar animation */
+.progress-bar {
+  transition: width 0.5s ease-out;
+}
+
+/* Pulse animation for active status */
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+.pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* Glow effect for buttons */
+.glow-primary {
+  box-shadow: var(--shadow-glow-primary);
+}
+
+/* Subtle border glow */
+.border-glow {
+  box-shadow: inset 0 0 0 1px var(--color-border), var(--shadow-card);
+}
