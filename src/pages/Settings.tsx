@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useSettingsStore } from '@/store/settingsStore'
 import { useSalesStore } from '@/store/salesStore'
@@ -7,7 +7,13 @@ import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { ConfirmDialog } from '@/components/features/ConfirmDialog'
-import { Settings, Palette, ChevronRight, Bell, Database, Info, Github, ExternalLink } from 'lucide-react'
+import { Settings, Palette, ChevronRight, Bell, Database, Info, Github, ExternalLink, BellRing, ShieldAlert, ShieldCheck } from 'lucide-react'
+import {
+  requestNotificationPermission,
+  getNotificationPermission,
+  isNotificationSupported,
+  sendTestNotification,
+} from '@/utils/notifications'
 import type { Theme, Settings as SettingsType, Sale, Plate } from '@/types'
 
 interface ExportData {
@@ -41,6 +47,23 @@ export default function SettingsPage() {
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [importError, setImportError] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default')
+
+  // Check notification permission on mount
+  useEffect(() => {
+    if (isNotificationSupported()) {
+      setNotificationPermission(getNotificationPermission())
+    }
+  }, [])
+
+  const handleRequestPermission = async () => {
+    const permission = await requestNotificationPermission()
+    setNotificationPermission(permission)
+  }
+
+  const handleTestNotification = () => {
+    sendTestNotification()
+  }
 
   const handleExport = () => {
     const data: ExportData = {
@@ -144,6 +167,42 @@ export default function SettingsPage() {
       {/* Notifications */}
       <Card title="Notifications" icon={<Bell className="w-5 h-5" />}>
         <div className="space-y-4">
+          {/* Permission Status */}
+          {isNotificationSupported() && (
+            <div className={`
+              flex items-center gap-3 p-3 rounded-xl
+              ${notificationPermission === 'granted' ? 'bg-safe/10' : notificationPermission === 'denied' ? 'bg-danger/10' : 'bg-warning/10'}
+            `}>
+              {notificationPermission === 'granted' ? (
+                <ShieldCheck className="w-5 h-5 text-safe" />
+              ) : (
+                <ShieldAlert className={`w-5 h-5 ${notificationPermission === 'denied' ? 'text-danger' : 'text-warning'}`} />
+              )}
+              <div className="flex-1">
+                <p className={`text-sm font-medium ${notificationPermission === 'granted' ? 'text-safe' : notificationPermission === 'denied' ? 'text-danger' : 'text-warning'}`}>
+                  {notificationPermission === 'granted' ? 'Notifications Permitted' :
+                   notificationPermission === 'denied' ? 'Notifications Blocked' :
+                   'Permission Required'}
+                </p>
+                {notificationPermission === 'denied' && (
+                  <p className="text-xs text-text-secondary mt-0.5">Enable in browser settings</p>
+                )}
+              </div>
+              {notificationPermission === 'default' && (
+                <Button variant="primary" size="sm" onClick={handleRequestPermission}>
+                  Allow
+                </Button>
+              )}
+            </div>
+          )}
+
+          {!isNotificationSupported() && (
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-danger/10">
+              <ShieldAlert className="w-5 h-5 text-danger" />
+              <p className="text-sm text-danger">Notifications not supported in this browser</p>
+            </div>
+          )}
+
           <label className="flex items-center justify-between cursor-pointer">
             <span className="text-text-primary">Enable Notifications</span>
             <button
@@ -211,11 +270,22 @@ export default function SettingsPage() {
                   />
                 </button>
               </label>
+
+              {notificationPermission === 'granted' && (
+                <Button
+                  variant="secondary"
+                  onClick={handleTestNotification}
+                  className="w-full"
+                >
+                  <BellRing className="w-4 h-4 mr-2" />
+                  Send Test Notification
+                </Button>
+              )}
             </>
           )}
 
           <p className="text-xs text-text-secondary">
-            Notification scheduling requires browser notification permissions.
+            Get notified when your 2-hour sell cooldown expires and slots become available.
           </p>
         </div>
       </Card>

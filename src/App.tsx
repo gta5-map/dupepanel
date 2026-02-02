@@ -1,6 +1,7 @@
 import { HashRouter, Routes, Route } from 'react-router-dom'
 import { Layout } from './components/layout/Layout'
 import { useTheme } from './hooks/useTheme'
+import { useNotifications } from './hooks/useNotifications'
 import Dashboard from './pages/Dashboard'
 import History from './pages/History'
 import Info from './pages/Info'
@@ -10,6 +11,9 @@ import Settings from './pages/Settings'
 function AppContent() {
   // Apply theme on mount and when it changes
   useTheme()
+
+  // Schedule notifications based on sales and settings
+  useNotifications()
 
   return (
     <Layout>
