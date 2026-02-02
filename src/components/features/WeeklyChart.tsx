@@ -30,7 +30,7 @@ export function WeeklyChart({ data }: WeeklyChartProps) {
 
       <div className="h-44 md:h-52">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+          <BarChart data={data} margin={{ top: 10, right: 10, left: 8, bottom: 0 }}>
             <defs>
               <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="var(--color-primary)" stopOpacity={1} />
@@ -48,9 +48,10 @@ export function WeeklyChart({ data }: WeeklyChartProps) {
               axisLine={false}
               tickLine={false}
               tick={{ fill: 'var(--color-text-secondary)', fontSize: 11 }}
+              tickMargin={8}
               allowDecimals={false}
               domain={[0, Math.max(maxCount, 3)]}
-              width={30}
+              width={44}
             />
             <Tooltip
               cursor={{ fill: 'var(--color-text-secondary)', opacity: 0.05, radius: 6 }}
