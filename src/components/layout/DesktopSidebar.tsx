@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutGrid, Clock, Layers, Settings, Info, Plus, Zap, Github, ExternalLink } from 'lucide-react'
+import { LayoutGrid, Clock, Layers, Settings, Info, Plus, Github, ExternalLink } from 'lucide-react'
 
 interface DesktopSidebarProps {
   onAddSale: () => void
@@ -39,9 +39,7 @@ export function DesktopSidebar({ onAddSale }: DesktopSidebarProps) {
       {/* Logo */}
       <div className="p-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
-            <Zap className="w-6 h-6 text-white" />
-          </div>
+          <img src={`${import.meta.env.BASE_URL}icon.svg`} alt="Dupepanel logo" className="w-10 h-10 rounded-xl shadow-lg" />
           <div>
             <h1 className="text-lg font-bold text-text-primary tracking-tight">Dupepanel</h1>
             <p className="text-[10px] text-text-secondary font-medium uppercase tracking-wider">GTA Sell Tracker</p>
