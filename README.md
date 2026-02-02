@@ -1,10 +1,18 @@
 # Dupepanel
 
-A web-based sell tracker for GTA Online to help avoid daily sell limits. Special thanks to @arnobify/dupeboard for the original Android app.
+
+
+A web-based sell tracker for GTA Online to help avoid daily sell limits. Special thanks to [@arnobify/dupeboard](https://github.com/arnobify/dupeboard) for the original Android app.
 
 Tracks your vehicle sales and shows the 2-hour and 30-hour rolling windows so you don't accidentally trigger the game's anti-dupe detection.
 
 **Live:** https://gta5-map.github.io/dupepanel/
+
+## Screenshots
+
+| Desktop | Mobile |
+| --- | --- |
+| [<img src="./screenshot-desktop.png" alt="Desktop screenshot" width="520" />](./screenshot-desktop.png) | [<img src="./screenshot-mobile.jpg" alt="Mobile screenshot" width="260" />](./screenshot-mobile.jpg) |
 
 ## Features
 
