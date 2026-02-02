@@ -1,5 +1,6 @@
 import { HashRouter, Routes, Route } from 'react-router-dom'
 import { Layout } from './components/layout/Layout'
+import { InstallPrompt } from './components/InstallPrompt'
 import { useTheme } from './hooks/useTheme'
 import { useNotifications } from './hooks/useNotifications'
 import Dashboard from './pages/Dashboard'
@@ -16,15 +17,18 @@ function AppContent() {
   useNotifications()
 
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/history" element={<History />} />
-        <Route path="/info" element={<Info />} />
-        <Route path="/plates" element={<Plates />} />
-        <Route path="/settings" element={<Settings />} />
-      </Routes>
-    </Layout>
+    <>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/history" element={<History />} />
+          <Route path="/info" element={<Info />} />
+          <Route path="/plates" element={<Plates />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
+      </Layout>
+      <InstallPrompt />
+    </>
   )
 }
 
