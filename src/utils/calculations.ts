@@ -92,6 +92,15 @@ export function isInCooldown(sale: Sale): boolean {
   return Date.now() - sale.timestamp < THIRTY_HOURS_MS
 }
 
+/**
+ * Get the remaining cooldown time in milliseconds for a sale
+ * Returns 0 if the sale is no longer in cooldown
+ */
+export function getRemainingCooldown(sale: Sale): number {
+  const elapsed = Date.now() - sale.timestamp
+  return Math.max(0, THIRTY_HOURS_MS - elapsed)
+}
+
 // ============================================
 // 18-Hour Sell Price Degradation System
 // ============================================

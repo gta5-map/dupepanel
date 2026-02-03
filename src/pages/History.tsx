@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { useSalesStore } from '@/store/salesStore'
-import { isInCooldown } from '@/utils/calculations'
-import { formatDateTime } from '@/utils/formatters'
+import { isInCooldown, getRemainingCooldown } from '@/utils/calculations'
+import { formatTime, formatDateTime } from '@/utils/formatters'
 import { ConfirmDialog } from '@/components/features/ConfirmDialog'
 import { EditSaleModal } from '@/components/features/EditSaleModal'
 import { SalesCalendar } from '@/components/features/SalesCalendar'
@@ -210,7 +210,7 @@ export default function History() {
                 {/* Cooldown indicator */}
                 {inCooldown && (
                   <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded">
-                    Active
+                    {formatTime(getRemainingCooldown(sale))} left
                   </span>
                 )}
 
