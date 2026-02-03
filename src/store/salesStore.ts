@@ -9,7 +9,7 @@ interface SalesState {
   removeSale: (id: string) => void
   getSales: () => Sale[]
   clearSales: () => void
-  importSales: (sales: Omit<Sale, 'id'>[]) => void
+  importSales: (sales: Omit<Sale, 'id' | 'timestamp'>[]) => void
 }
 
 export const useSalesStore = create<SalesState>()(
@@ -47,7 +47,11 @@ export const useSalesStore = create<SalesState>()(
 
       importSales: (sales) => set({
         sales: sales
-          .map((sale) => ({ ...sale, id: crypto.randomUUID() }))
+          .map((sale) => ({
+            ...sale,
+            id: crypto.randomUUID(),
+            timestamp: new Date(`${sale.date}T${sale.time}`).getTime(),
+          }))
           .sort((a, b) => b.timestamp - a.timestamp)
       }),
     }),
