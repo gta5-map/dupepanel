@@ -48,6 +48,7 @@ export default function SettingsPage() {
 
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [importError, setImportError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default')
 
@@ -68,29 +69,39 @@ export default function SettingsPage() {
   }
 
   const handleExport = () => {
-    const data: ExportData = {
-      version: '1.0.0',
-      exportedAt: new Date().toISOString(),
-      sales,
-      plates,
-      settings: {
-        theme,
-        notificationsEnabled,
-        notifyOneSlot,
-        notifyTwoSlots,
-        notifyPriceReset,
-      },
-    }
+    setImportError('')
+    setSuccessMessage('')
 
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `dupepanel-backup-${new Date().toISOString().split('T')[0]}.json`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
+    try {
+      const data: ExportData = {
+        version: '1.0.0',
+        exportedAt: new Date().toISOString(),
+        sales,
+        plates,
+        settings: {
+          theme,
+          notificationsEnabled,
+          notifyOneSlot,
+          notifyTwoSlots,
+          notifyPriceReset,
+        },
+      }
+
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `dupepanel-backup-${new Date().toISOString().split('T')[0]}.json`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+
+      setSuccessMessage('Data exported successfully')
+      setTimeout(() => setSuccessMessage(''), 3000)
+    } catch {
+      setImportError('Failed to export data')
+    }
   }
 
   const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,6 +109,7 @@ export default function SettingsPage() {
     if (!file) return
 
     setImportError('')
+    setSuccessMessage('')
 
     const reader = new FileReader()
     reader.onload = (event) => {
@@ -113,6 +125,9 @@ export default function SettingsPage() {
         if (data.settings) {
           importSettings(data.settings)
         }
+
+        setSuccessMessage(`Imported ${data.sales.length} sales and ${data.plates.length} plates`)
+        setTimeout(() => setSuccessMessage(''), 3000)
       } catch {
         setImportError('Failed to import: Invalid file format')
       }
@@ -340,6 +355,10 @@ export default function SettingsPage() {
 
           {importError && (
             <p className="text-sm text-danger">{importError}</p>
+          )}
+
+          {successMessage && (
+            <p className="text-sm text-safe">{successMessage}</p>
           )}
 
           <Button
