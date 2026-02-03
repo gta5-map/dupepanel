@@ -1,4 +1,5 @@
 import type { Sale } from '@/types'
+import { getSellPriceResetTime } from '@/utils/calculations'
 
 const TWO_HOURS_MS = 2 * 60 * 60 * 1000
 const STORAGE_KEY_SCHEDULED = 'dupepanel_scheduled_notifications'
@@ -7,8 +8,9 @@ const STORAGE_KEY_SHOWN = 'dupepanel_shown_notifications'
 export interface ScheduledNotification {
   id: string
   time: number // timestamp when notification should fire
-  slots: 1 | 2 // number of slots becoming available
-  saleId: string // which sale's cooldown is expiring
+  slots?: 1 | 2 // number of slots becoming available (for 2h notifications)
+  saleId?: string // which sale's cooldown is expiring
+  type: 'slot' | 'price-reset' // notification type
 }
 
 /**
@@ -53,7 +55,7 @@ export function isNotificationSupported(): boolean {
  */
 export function scheduleNotifications(
   sales: Sale[],
-  options: { notifyOneSlot: boolean; notifyTwoSlots: boolean }
+  options: { notifyOneSlot: boolean; notifyTwoSlots: boolean; notifyPriceReset: boolean }
 ): void {
   const now = Date.now()
 
@@ -87,9 +89,22 @@ export function scheduleNotifications(
             time: expiryTime,
             slots: slotsAfter as 1 | 2,
             saleId: sale.id,
+            type: 'slot',
           })
         }
       }
+    }
+  }
+
+  // Schedule 18h price reset notification
+  if (options.notifyPriceReset) {
+    const resetTime = getSellPriceResetTime(sales)
+    if (resetTime !== null && resetTime > now) {
+      scheduled.push({
+        id: `price-reset-${resetTime}`,
+        time: resetTime,
+        type: 'price-reset',
+      })
     }
   }
 

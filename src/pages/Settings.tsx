@@ -33,6 +33,8 @@ export default function SettingsPage() {
   const setNotifyOneSlot = useSettingsStore((s) => s.setNotifyOneSlot)
   const notifyTwoSlots = useSettingsStore((s) => s.notifyTwoSlots)
   const setNotifyTwoSlots = useSettingsStore((s) => s.setNotifyTwoSlots)
+  const notifyPriceReset = useSettingsStore((s) => s.notifyPriceReset)
+  const setNotifyPriceReset = useSettingsStore((s) => s.setNotifyPriceReset)
   const importSettings = useSettingsStore((s) => s.importSettings)
   const resetSettings = useSettingsStore((s) => s.resetSettings)
 
@@ -76,6 +78,7 @@ export default function SettingsPage() {
         notificationsEnabled,
         notifyOneSlot,
         notifyTwoSlots,
+        notifyPriceReset,
       },
     }
 
@@ -271,6 +274,28 @@ export default function SettingsPage() {
                 </button>
               </label>
 
+              <label className="flex items-center justify-between cursor-pointer">
+                <span className="text-text-primary">Notify when price resets to 100%</span>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={notifyPriceReset}
+                  onClick={() => setNotifyPriceReset(!notifyPriceReset)}
+                  className={`
+                    relative w-11 h-6 rounded-full transition-colors
+                    ${notifyPriceReset ? 'bg-primary' : 'bg-text-secondary/30'}
+                  `}
+                >
+                  <span
+                    className={`
+                      absolute top-1 left-1 w-4 h-4 rounded-full bg-white
+                      transition-transform
+                      ${notifyPriceReset ? 'translate-x-5' : 'translate-x-0'}
+                    `}
+                  />
+                </button>
+              </label>
+
               {notificationPermission === 'granted' && (
                 <Button
                   variant="secondary"
@@ -285,7 +310,7 @@ export default function SettingsPage() {
           )}
 
           <p className="text-xs text-text-secondary">
-            Get notified when your 2-hour sell cooldown expires and slots become available.
+            Get notified when sell slots become available (2h cooldown) or when your sell price resets to 100% (18h window).
           </p>
         </div>
       </Card>

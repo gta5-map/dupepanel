@@ -196,9 +196,16 @@ async function checkScheduledNotifications() {
       // Check if notification is due
       if (notification.time <= now) {
         // Check user preferences for this notification type
-        const shouldNotify =
-          (notification.slots === 1 && settings.state?.notifyOneSlot) ||
-          (notification.slots === 2 && settings.state?.notifyTwoSlots);
+        let shouldNotify = false;
+
+        if (notification.type === 'price-reset') {
+          shouldNotify = settings.state?.notifyPriceReset !== false;
+        } else {
+          // Slot notifications (default type for backwards compatibility)
+          shouldNotify =
+            (notification.slots === 1 && settings.state?.notifyOneSlot) ||
+            (notification.slots === 2 && settings.state?.notifyTwoSlots);
+        }
 
         if (shouldNotify) {
           showNotification(notification);
@@ -221,19 +228,27 @@ async function checkScheduledNotifications() {
 
 // Show a notification
 function showNotification(notification) {
-  const title =
-    notification.slots === 2 ? '2 Sell Slots Available!' : '1 Sell Slot Available!';
+  let title, body, tag;
 
-  const body =
-    notification.slots === 2
-      ? 'Your 2-hour cooldown has fully reset. You can sell 2 vehicles.'
-      : '1 slot is now available in your 2-hour window.';
+  if (notification.type === 'price-reset') {
+    title = 'Full Sell Price Available!';
+    body = 'Your 18-hour window has reset. You can now sell at 100% price.';
+    tag = 'dupepanel-price-reset';
+  } else {
+    // Slot notifications
+    title = notification.slots === 2 ? '2 Sell Slots Available!' : '1 Sell Slot Available!';
+    body =
+      notification.slots === 2
+        ? 'Your 2-hour cooldown has fully reset. You can sell 2 vehicles.'
+        : '1 slot is now available in your 2-hour window.';
+    tag = `dupepanel-slot-${notification.slots}`;
+  }
 
   self.registration.showNotification(title, {
     body,
     icon: 'icon-192.png',
     badge: 'icon-192.png',
-    tag: `dupepanel-slot-${notification.slots}`,
+    tag,
     renotify: true,
     requireInteraction: false,
     data: {

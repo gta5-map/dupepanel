@@ -7,6 +7,7 @@ interface SettingsState extends Settings {
   toggleNotifications: () => void
   setNotifyOneSlot: (enabled: boolean) => void
   setNotifyTwoSlots: (enabled: boolean) => void
+  setNotifyPriceReset: (enabled: boolean) => void
   importSettings: (settings: Settings) => void
   resetSettings: () => void
 }
@@ -16,6 +17,7 @@ const defaultSettings: Settings = {
   notificationsEnabled: true,
   notifyOneSlot: true,
   notifyTwoSlots: true,
+  notifyPriceReset: true,
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -31,6 +33,8 @@ export const useSettingsStore = create<SettingsState>()(
       setNotifyOneSlot: (enabled) => set({ notifyOneSlot: enabled }),
 
       setNotifyTwoSlots: (enabled) => set({ notifyTwoSlots: enabled }),
+
+      setNotifyPriceReset: (enabled) => set({ notifyPriceReset: enabled }),
 
       importSettings: (settings) => set(settings),
 

@@ -15,6 +15,7 @@ export function useNotifications() {
   const notificationsEnabled = useSettingsStore((state) => state.notificationsEnabled)
   const notifyOneSlot = useSettingsStore((state) => state.notifyOneSlot)
   const notifyTwoSlots = useSettingsStore((state) => state.notifyTwoSlots)
+  const notifyPriceReset = useSettingsStore((state) => state.notifyPriceReset)
 
   const updateSchedule = useCallback(() => {
     // Only schedule if notifications are enabled and permitted
@@ -35,8 +36,9 @@ export function useNotifications() {
     scheduleNotifications(sales, {
       notifyOneSlot,
       notifyTwoSlots,
+      notifyPriceReset,
     })
-  }, [sales, notificationsEnabled, notifyOneSlot, notifyTwoSlots])
+  }, [sales, notificationsEnabled, notifyOneSlot, notifyTwoSlots, notifyPriceReset])
 
   // Update schedule when dependencies change
   useEffect(() => {

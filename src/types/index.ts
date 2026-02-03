@@ -19,6 +19,7 @@ export interface Settings {
   notificationsEnabled: boolean;
   notifyOneSlot: boolean;
   notifyTwoSlots: boolean;
+  notifyPriceReset: boolean;
 }
 
 // Theme type
