@@ -8,7 +8,7 @@ interface PlatesState {
   removePlate: (id: string) => void
   getPlates: () => Plate[]
   clearPlates: () => void
-  importPlates: (plates: Plate[]) => void
+  importPlates: (plates: Omit<Plate, 'id'>[]) => void
 }
 
 export const usePlatesStore = create<PlatesState>()(
@@ -46,7 +46,9 @@ export const usePlatesStore = create<PlatesState>()(
 
       clearPlates: () => set({ plates: [] }),
 
-      importPlates: (plates) => set({ plates }),
+      importPlates: (plates) => set({
+        plates: plates.map((plate) => ({ ...plate, id: crypto.randomUUID() }))
+      }),
     }),
     {
       name: 'dupepanel_plates',

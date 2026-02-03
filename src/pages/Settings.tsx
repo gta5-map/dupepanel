@@ -19,8 +19,8 @@ import type { Theme, Settings as SettingsType, Sale, Plate } from '@/types'
 interface ExportData {
   version: string
   exportedAt: string
-  sales: Sale[]
-  plates: Plate[]
+  sales: Omit<Sale, 'id'>[]
+  plates: Omit<Plate, 'id'>[]
   settings: SettingsType
 }
 
@@ -76,8 +76,8 @@ export default function SettingsPage() {
       const data: ExportData = {
         version: '1.0.0',
         exportedAt: new Date().toISOString(),
-        sales,
-        plates,
+        sales: sales.map(({ id: _, ...rest }) => rest),
+        plates: plates.map(({ id: _, ...rest }) => rest),
         settings: {
           theme,
           notificationsEnabled,
