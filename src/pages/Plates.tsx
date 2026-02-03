@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { usePlatesStore } from '@/store/platesStore'
+import { useSalesStore } from '@/store/salesStore'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Card } from '@/components/ui/Card'
@@ -10,6 +11,17 @@ export default function Plates() {
   const plates = usePlatesStore((state) => state.plates)
   const addPlate = usePlatesStore((state) => state.addPlate)
   const removePlate = usePlatesStore((state) => state.removePlate)
+  const sales = useSalesStore((state) => state.sales)
+
+  const plateUsageCount = useMemo(() => {
+    const counts: Record<string, number> = {}
+    for (const sale of sales) {
+      if (sale.plate) {
+        counts[sale.plate] = (counts[sale.plate] || 0) + 1
+      }
+    }
+    return counts
+  }, [sales])
 
   const [newPlate, setNewPlate] = useState('')
   const [error, setError] = useState('')
@@ -116,9 +128,14 @@ export default function Plates() {
                 <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                   <Square className="w-5 h-5 text-primary" />
                 </div>
-                <span className="font-mono font-bold text-lg text-text-primary tracking-wider">
-                  {plate.license}
-                </span>
+                <div className="flex flex-col">
+                  <span className="font-mono font-bold text-lg text-text-primary tracking-wider">
+                    {plate.license}
+                  </span>
+                  <span className="text-xs text-text-secondary">
+                    {plateUsageCount[plate.license] || 0} sale{(plateUsageCount[plate.license] || 0) !== 1 ? 's' : ''}
+                  </span>
+                </div>
               </div>
               <button
                 onClick={() => setDeleteId(plate.id)}
